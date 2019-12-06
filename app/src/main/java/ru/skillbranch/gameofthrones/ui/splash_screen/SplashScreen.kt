@@ -2,14 +2,18 @@ package ru.skillbranch.gameofthrones.ui.splash_screen
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import ru.skillbranch.gameofthrones.R
 import ru.skillbranch.gameofthrones.databinding.SplashScreenFragmentBinding
 import ru.skillbranch.gameofthrones.ui.MainActivity
@@ -30,6 +34,16 @@ class SplashScreen : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(SplashScreenViewModel::class.java)
 
         viewModel.navigateNext().observe(this, Observer {
+
+            if (!isNetworkAvailable() && it == false) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.no_internet_error),
+                    Snackbar.LENGTH_INDEFINITE
+
+                ).show()
+            }
+
             if (it == true) {
                 intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -69,5 +83,13 @@ class SplashScreen : AppCompatActivity() {
         }
 
         alfaAnim.repeatCount = Animation.INFINITE
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 }

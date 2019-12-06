@@ -11,6 +11,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.character_screen.view.*
@@ -57,13 +58,21 @@ class CharacterScreen : Fragment() {
                 Snackbar.make(
                     binding.root,
                     "${character.name} - ${it}", Snackbar.LENGTH_INDEFINITE
-                )
+                ).show()
             }
         })
 
         viewModel.getHouseTab().observe(this, Observer {
             it?.let { tab ->
                 configureView(tab)
+            }
+        })
+
+        viewModel.getNavigationRelation().observe(this, Observer { id ->
+            id?.let { relChar ->
+                findNavController().navigate(
+                    CharacterScreenDirections.actionCharacterScreenSelf(relChar))
+                viewModel.doneNavigation()
             }
         })
 

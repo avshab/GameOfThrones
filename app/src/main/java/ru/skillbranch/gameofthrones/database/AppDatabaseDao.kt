@@ -25,7 +25,7 @@ interface AppDatabaseDao {
     fun insertCharacter(character: Character)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCharacters(data: List<Character>)
+    fun insertAllCharacters(data: List<Character>)
 
     @Query("SELECT * FROM character_table WHERE id = :key")
     fun getCharacter(key: String): Character?

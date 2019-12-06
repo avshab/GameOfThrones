@@ -17,9 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:layoutDescription="@xml/collapsing_toolbar"
-        app:showPaths="true"
-        tools:showPaths="true">
+        app:layoutDescription="@xml/collapsing_toolbar">
 
         <ImageView
             android:id="@+id/character_house_icon"
@@ -129,7 +127,7 @@
                     android:text="@{characterViewModel.characterFull.father.name}"
                     android:textColor="@color/color_gray_light"
                     android:textSize="@dimen/text_size_14"
-                    android:onClick="@{() -> characterViewModel.navigateToRelative(characterViewModel.characterFull.father.id)}"
+                    android:onClick="@{() -> characterViewModel.navigateToRelative(characterViewModel.characterFull.father)}"
                     android:visibility="@{characterViewModel.characterFull.father == null? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.6"
@@ -172,7 +170,7 @@
                     android:text="@{characterViewModel.characterFull.mother.name}"
                     android:textColor="@color/color_gray_light"
                     android:textSize="@dimen/text_size_14"
-                    android:onClick="@{() -> characterViewModel.navigateToRelative(characterViewModel.characterFull.mother.id)}"
+                    android:onClick="@{() -> characterViewModel.navigateToRelative(characterViewModel.characterFull.mother)}"
                     android:visibility="@{characterViewModel.characterFull.mother == null? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.6"

@@ -3,7 +3,7 @@ package ru.skillbranch.gameofthrones.common.extensions
 import ru.skillbranch.gameofthrones.data.local.entities.Character
 import ru.skillbranch.gameofthrones.data.remote.res.CharacterRes
 
-fun CharacterRes.transformToCharacter(houseId: String) = Character(
+fun CharacterRes.transformToCharacter() = Character(
     id = this.url.split("/").last(),
     name = this.name,
     gender = this.gender,
@@ -15,5 +15,5 @@ fun CharacterRes.transformToCharacter(houseId: String) = Character(
     father = this.father.split("/").last(),
     mother = this.mother.split("/").last(),
     spouse = this.spouse,
-    houseId = houseId
+    houseId = this.houseId
 )

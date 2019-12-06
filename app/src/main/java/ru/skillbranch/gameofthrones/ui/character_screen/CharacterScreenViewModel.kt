@@ -13,6 +13,8 @@ class CharacterScreenViewModel(private val repository: RootRepository) : ViewMod
 
     var characterFull = MutableLiveData<CharacterFull>()
 
+    var relativeNavigate = MutableLiveData<RelativeCharacter>()
+
     var titles = Transformations.map(characterFull) {
         it.titles.joinToString("\n")
     }
@@ -38,12 +40,13 @@ class CharacterScreenViewModel(private val repository: RootRepository) : ViewMod
     fun getHouseTab() = houseTab
 
 
-    fun navigateToRelative(id: String) {
-
+    fun navigateToRelative(id: RelativeCharacter) {
+        relativeNavigate.value = id
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        repository.clearDisposable()
+    fun getNavigationRelation() = relativeNavigate
+
+    fun doneNavigation() {
+        relativeNavigate.value = null
     }
 }

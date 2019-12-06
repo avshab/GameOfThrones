@@ -16,6 +16,17 @@ fun initHousesTabs(name: String) : HousesTabs? = when (name) {
     else -> null
 }
 
+fun initHousesTabsByFullName(name: String) : HousesTabs? = when (name) {
+    HousesTabs.STARK.getFullName() -> HousesTabs.STARK
+    HousesTabs.LANNISTER.getFullName() -> HousesTabs.LANNISTER
+    HousesTabs.TARGARYEN.getFullName() -> HousesTabs.TARGARYEN
+    HousesTabs.BARATHEON.getFullName() -> HousesTabs.BARATHEON
+    HousesTabs.GREYJOY.getFullName() -> HousesTabs.GREYJOY
+    HousesTabs.MARTEL.getFullName() -> HousesTabs.MARTEL
+    HousesTabs.TYRELL.getFullName() -> HousesTabs.TYRELL
+    else -> null
+}
+
 fun HousesTabs.getFullName() = when (this) {
     HousesTabs.STARK -> AppConfig.NEED_HOUSES[0]
     HousesTabs.LANNISTER -> AppConfig.NEED_HOUSES[1]

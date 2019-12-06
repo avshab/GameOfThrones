@@ -3,11 +3,7 @@ package ru.skillbranch.gameofthrones.repositories
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.constraintlayout.widget.Constraints.TAG
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import ru.skillbranch.gameofthrones.common.extensions.*
 import ru.skillbranch.gameofthrones.data.local.entities.*
 import ru.skillbranch.gameofthrones.data.remote.res.CharacterRes
@@ -22,28 +18,34 @@ object RootRepository {
 
     private val apiInterface: ApiInterface = NetworkModule.INSTANSE
     private val appDatabaseDao: AppDatabaseDao = DatabaseModule.getInstanse()
+    private val coroutineJob = Job()
+    private val localScope = CoroutineScope(Dispatchers.Main + coroutineJob)
 
-    private val compositeDisposable = CompositeDisposable()
+
     /**
      * Получение данных о всех домах
      * @param result - колбек содержащий в себе список данных о домах
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun getAllHouses(result: (houses: List<HouseRes>) -> Unit) {
-        val finalList = mutableListOf<HouseRes>()
-        for (page in 0..45) {
-            compositeDisposable.add(
-                apiInterface.needPage(page)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        {
-                            finalList.addAll(it)
-                            result(finalList)
-                        },
-                        { error -> Log.i(TAG, error.toString()) }
-                    ))
-        }
+        val fullList = mutableListOf<HouseRes>()
+        localScope.launch {
+            var pageNumber = 1
+            while (true) {
+
+                try {
+                    val data = apiInterface.needPage(pageNumber++)
+                    if (data.isNullOrEmpty()) {
+                        break
+                    }
+                    fullList.addAll(apiInterface.needPage(pageNumber++))
+                } catch (error: Exception) {
+                    Log.i(TAG, error.toString())
+                    break
+                }
+            }
+
+        }.invokeOnCompletion { result(fullList) }
     }
 
     /**
@@ -55,18 +57,16 @@ object RootRepository {
     fun getNeedHouses(vararg houseNames: String, result: (houses: List<HouseRes>) -> Unit) {
 
         val currentList = mutableListOf<HouseRes>()
-        houseNames.forEach { houseName ->
-            apiInterface.needHouse(houseName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        currentList.addAll(it)
-                        result(currentList)
-                    },
-                    { error -> Log.i(TAG, error.toString()) }
-                )
-        }
+
+        localScope.launch {
+            houseNames.forEach { houseName ->
+                try {
+                    currentList.addAll(apiInterface.needHouse(houseName))
+                } catch (error: Exception) {
+                    Log.i(TAG, error.toString())
+                }
+            }
+        }.invokeOnCompletion { result(currentList) }
     }
 
     /**
@@ -80,30 +80,29 @@ object RootRepository {
         result: (houses: List<Pair<HouseRes, List<CharacterRes>>>) -> Unit
     ) {
         val finalList = mutableListOf<Pair<HouseRes, List<CharacterRes>>>()
-        houseNames.forEach { houseName ->
-            apiInterface.needHouse(houseName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .map { houses ->
+        localScope.launch {
+            houseNames.forEach { houseName ->
+                try {
+                    val houses = apiInterface.needHouse(houseName)
                     houses.forEach { house ->
-                        val characters = mutableListOf<CharacterRes>()
-                        house.swornMembers.forEach { url ->
-                            this.getCharacter(url.split("/").last()) { ch ->
-                                characters.add(ch)
-                            }
-                        }
+                        val characters = house.swornMembers.map { url ->
+                            getCharactersByUrl(url)
+                        }.filterNotNull()
                         finalList.add(house to characters)
                     }
-                    finalList
+
+                } catch (error: Exception) {
+                    Log.i(TAG, error.toString())
                 }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        result(finalList)
-                    },
-                    { error -> Log.i(TAG, error.toString()) }
-                )
-        }
+            }
+        }.invokeOnCompletion { result(finalList) }
+    }
+
+    suspend fun getCharactersByUrl(url: String) = try {
+        apiInterface.needCharacter(url.split("/").last())
+    } catch (error: Exception) {
+        Log.i(TAG, error.toString())
+        null
     }
 
     /**
@@ -115,15 +114,18 @@ object RootRepository {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun insertHouses(houses: List<HouseRes>, complete: () -> Unit) {
 
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.insertAll(houses.map { it.transformToHouse() }) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    complete()
-                },
-                { error -> Log.i(TAG, error.toString()) }
-            ))
+        localScope.launch {
+            try {
+                val task = async(Dispatchers.IO) {
+                    appDatabaseDao.insertAll(houses.map { it.transformToHouse() })
+                    return@async true
+                }
+                task.await()
+                complete?.invoke()
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
+            }
+        }
     }
 
     /**
@@ -135,22 +137,20 @@ object RootRepository {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun insertCharacters(
         characters: List<CharacterRes>,
-        complete: (() -> Unit)? = null,
-        houseId: String = ""
+        complete: (() -> Unit)? = null
     ) {
-        compositeDisposable.add(Maybe.fromCallable {
-            appDatabaseDao.insertCharacters(characters.map {
-                it.transformToCharacter(houseId)
-            })
+        localScope.launch {
+            try {
+                val task = async(Dispatchers.IO) {
+                    appDatabaseDao.insertAllCharacters(characters.map { it.transformToCharacter() })
+                    return@async true
+                }
+                task.await()
+                complete?.invoke()
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
+            }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    complete?.invoke()
-                },
-                { error -> Log.i(TAG, error.toString()) }
-            ))
     }
 
     /**
@@ -159,16 +159,19 @@ object RootRepository {
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun dropDb(complete: () -> Unit) {
-
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.clear() }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    complete()
-                },
-                { error -> Log.i(TAG, error.toString()) }
-            ))
+        localScope.launch {
+            try {
+                val task = async(Dispatchers.IO) {
+                    appDatabaseDao.clear()
+                    appDatabaseDao.clearCharacters()
+                    return@async true
+                }
+                task.await()
+                complete()
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
+            }
+        }
     }
 
     /**
@@ -180,20 +183,23 @@ object RootRepository {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun findCharactersByHouseName(
         name: String,
-        result: (Characters: List<CharacterItem>) -> Unit
+        result: (characters: List<CharacterItem>) -> Unit
     ) {
-
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.getCharactersFromHouse(name) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    result(data.map { it.transformToCharacterItem() })
-                },
-                { error ->
-                    Log.i(TAG, error.toString())
+        localScope.launch {
+            try {
+                val task = async(Dispatchers.IO) {
+                    return@async appDatabaseDao.getCharactersFromHouse(name).map {
+                        it.transformToCharacterItem()
+                    }
                 }
-            ))
+                val taskResult = task.await()
+                taskResult?.let {
+                    result(it)
+                }
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
+            }
+        }
     }
 
     /**
@@ -205,49 +211,26 @@ object RootRepository {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun findCharacterFullById(id: String, result: (Character: CharacterFull) -> Unit) {
 
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.getCharacter(id) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .flatMap { character ->
-                Maybe.fromCallable { getCharacterObservable(character.mother) }
-                    .map { mother ->
-                        character to mother
+        localScope.launch {
+            try {
+                val task = async(Dispatchers.IO) {
+                    appDatabaseDao.getCharacter(id)?.let { character ->
+                        return@async character.transformToCharacterFull().copy(
+                            father = appDatabaseDao.getCharacter(character.father.split("/").last())?.transformToRelativeCharacter(),
+                            mother = appDatabaseDao.getCharacter(character.mother.split("/").last())?.transformToRelativeCharacter()
+                        )
                     }
+                    return@async null
+                }
+                val taskResult = task.await()
+                taskResult?.let {
+                    result(it)
+                }
+
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
             }
-            .observeOn(Schedulers.io())
-            .concatMap {
-                Maybe.fromCallable { getCharacterObservable(it.first.father) }
-                    .map { father ->
-                        Triple(it.first, it.second, father)
-                    }
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                result(
-                    it.first.transformToCharacterFull()
-                )
-                it.second.subscribe({ mother ->
-                    mother?.let { motherNotNull ->
-                        it.first.transformToCharacterFull()
-                            .copy(mother = motherNotNull.transformToRelativeCharacter())
-                    }
-                }, {
-
-                })
-
-                it.third.subscribe({ father ->
-                    father?.let { fatherNotNull ->
-                        it.first.transformToCharacterFull()
-                            .copy(mother = fatherNotNull.transformToRelativeCharacter())
-                    }
-                }, {
-
-                })
-            },
-                { error ->
-                    Log.i(TAG, error.toString())
-                })
-        )
+        }
     }
 
     /**
@@ -257,74 +240,16 @@ object RootRepository {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun isNeedUpdate(result: (isNeed: Boolean) -> Unit) {
 
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.getAll() }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    result(data.isNullOrEmpty())
-                },
-                { error ->
-                    Log.i(TAG, error.toString())
+        localScope.launch {
+            try {
+                val task = async(Dispatchers.IO) {
+                    return@async appDatabaseDao.getAll().size == 0
                 }
-            ))
-    }
-
-    fun getAllHousesFromDB(result: (list: List<House>) -> Unit) {
-
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.getAll() }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    data?.let {
-                        result(it)
-                    }
-                },
-                { error ->
-                    Log.i(TAG, error.toString())
-                }
-            ))
-    }
-
-    fun getCharacter(id: String, result: (character: CharacterRes) -> Unit) {
-        compositeDisposable.add(apiInterface.needCharacter(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { result(it) },
-                { error -> Log.i(TAG, error.toString()) }
-            ))
-    }
-
-    fun getRelative(id: String, result: (relative: RelativeCharacter) -> Unit) {
-
-        compositeDisposable.add(Maybe.fromCallable { appDatabaseDao.getCharacter(id) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { character ->
-                    character?.let {
-                        result(it.transformToRelativeCharacter())
-                    }
-                },
-                { error ->
-                    Log.i(TAG, error.toString())
-                }
-            ))
-    }
-
-    private fun getCharacterObservable(id: String): Observable<Character?> {
-        return Observable.fromCallable {
-            val data = appDatabaseDao.getCharacter(id)
-            if (data == null) {
-                data
-            } else initEmptyCharacter()
-        }.doOnError { error -> Log.i(TAG, error.toString()) }
-
-    }
-
-    fun clearDisposable() {
-        compositeDisposable.clear()
+                val taskResult = task.await()
+                result(taskResult)
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
+            }
+        }
     }
 }

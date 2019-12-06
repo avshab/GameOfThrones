@@ -17,4 +17,5 @@
     <string name="character_mother_item_name">Mother</string>
     <string name="search_employee_hint">Input name</string>
     <string name="menu_search_title">Search</string>
+    <string name="no_internet_error">Интернет недоступен - приложение не может быть запущенно. Подключитесь к интернету и перезапустите приложение</string>
 </resources>
