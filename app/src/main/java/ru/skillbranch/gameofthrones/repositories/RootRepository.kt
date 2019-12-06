@@ -28,24 +28,28 @@ object RootRepository {
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun getAllHouses(result: (houses: List<HouseRes>) -> Unit) {
-        val fullList = mutableListOf<HouseRes>()
+
         localScope.launch {
-            var pageNumber = 1
-            while (true) {
+            try {
+                val task = async(Dispatchers.IO) {
+                    val fullList = mutableListOf<HouseRes>()
+                    var pageNumber = 1
+                    while (true) {
 
-                try {
-                    val data = apiInterface.needPage(pageNumber++)
-                    if (data.isNullOrEmpty()) {
-                        break
+                        val data = apiInterface.needPage(pageNumber++)
+                        if (data.isNullOrEmpty()) {
+                            break
+                        }
+                        fullList.addAll(data)
                     }
-                    fullList.addAll(data)
-                } catch (error: Exception) {
-                    Log.i(TAG, error.toString())
-                    break
+                    return@async fullList
                 }
+                val taskResult = task.await()
+                result(taskResult)
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
             }
-
-        }.invokeOnCompletion { result(fullList) }
+        }
     }
 
     /**
@@ -56,17 +60,24 @@ object RootRepository {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun getNeedHouses(vararg houseNames: String, result: (houses: List<HouseRes>) -> Unit) {
 
-        val currentList = mutableListOf<HouseRes>()
-
         localScope.launch {
-            houseNames.forEach { houseName ->
-                try {
-                    currentList.addAll(apiInterface.needHouse(houseName))
-                } catch (error: Exception) {
-                    Log.i(TAG, error.toString())
+            try {
+                val task = async(Dispatchers.IO) {
+                    val currentList = mutableListOf<HouseRes>()
+
+                    houseNames.forEach { houseName ->
+
+                        currentList.addAll(apiInterface.needHouse(houseName))
+
+                    }
+                    return@async currentList
                 }
+                val taskResult = task.await()
+                result(taskResult)
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
             }
-        }.invokeOnCompletion { result(currentList) }
+        }
     }
 
     /**
@@ -79,23 +90,31 @@ object RootRepository {
         vararg houseNames: String,
         result: (houses: List<Pair<HouseRes, List<CharacterRes>>>) -> Unit
     ) {
-        val finalList = mutableListOf<Pair<HouseRes, List<CharacterRes>>>()
+
         localScope.launch {
-            houseNames.forEach { houseName ->
-                try {
-                    val houses = apiInterface.needHouse(houseName)
-                    houses.forEach { house ->
-                        val characters = house.swornMembers.map { url ->
-                            getCharactersByUrl(url)
-                        }.filterNotNull()
-                        finalList.add(house to characters)
+            try {
+                val task = async(Dispatchers.IO) {
+                    val finalList = mutableListOf<Pair<HouseRes, List<CharacterRes>>>()
+
+                    houseNames.forEach { houseName ->
+
+                        val houses = apiInterface.needHouse(houseName)
+                        houses.forEach { house ->
+                            val characters = house.swornMembers.map { url ->
+                                getCharactersByUrl(url)
+                            }.filterNotNull()
+                            finalList.add(house to characters)
+                        }
                     }
 
-                } catch (error: Exception) {
-                    Log.i(TAG, error.toString())
+                    return@async finalList
                 }
+                val taskResult = task.await()
+                result(taskResult)
+            } catch (error: Exception) {
+                Log.i(TAG, error.toString())
             }
-        }.invokeOnCompletion { result(finalList) }
+        }
     }
 
     suspend fun getCharactersByUrl(url: String) = try {
