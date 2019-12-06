@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="androidx.core.content.ContextCompat"/>
+
+        <variable
+            name="itemTitle"
+            type="String" />
+
+        <variable
+            name="itemInfo"
+            type="String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/point_icon"
+            android:layout_width="@dimen/small_icon_diameter"
+            android:layout_height="@dimen/small_icon_diameter"
+            android:layout_marginStart="@dimen/base_margin"
+            android:src="@drawable/ic_icon_decor"
+            app:layout_constraintBottom_toBottomOf="@+id/title_item_static_block"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title_item_static_block" />
+
+        <TextView
+            android:id="@+id/title_item_static_block"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_margin"
+            android:layout_marginTop="@dimen/base_margin"
+            android:text="@{itemTitle}"
+            android:textColor="@color/color_primary_dark"
+            android:textSize="@dimen/text_size_14"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toEndOf="@+id/point_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Заголовок" />
+
+        <TextView
+            android:id="@+id/infp_item_static_block"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="@dimen/small_padding"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingEnd="@dimen/small_padding"
+            android:text="@{itemInfo}"
+            android:textColor="@color/color_gray"
+            android:textSize="@dimen/text_size_14"
+            android:textAlignment="textStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toEndOf="@+id/title_item_static_block"
+            app:layout_constraintTop_toTopOf="@+id/title_item_static_block" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

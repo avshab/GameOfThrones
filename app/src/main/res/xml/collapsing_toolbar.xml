@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        app:constraintSetEnd="@id/collapsed"
+        app:constraintSetStart="@id/expanded">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/character_house_icon"
+            app:touchAnchorSide="bottom" />
+
+        <KeyFrameSet>
+            <KeyAttribute
+                app:framePosition="60"
+                app:target="@id/character_house_icon">
+                <CustomAttribute
+                    app:attributeName="imageAlpha"
+                    app:customIntegerValue="255" />
+            </KeyAttribute>
+            <KeyAttribute
+                app:framePosition="90"
+                app:target="@id/character_house_icon">
+                <CustomAttribute
+                    app:attributeName="imageAlpha"
+                    app:customIntegerValue="0" />
+            </KeyAttribute>
+
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/expanded">
+        <Constraint
+            android:id="@id/character_house_icon"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <Constraint
+            android:id="@id/character_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleX="1.0"
+            android:scaleY="1.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="120dp"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/collapsed">
+        <Constraint
+            android:id="@id/character_house_icon"
+            android:layout_height="0.01dp"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@id/character_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="0.01dp"/>
+
+    </ConstraintSet>
+
+</MotionScene>

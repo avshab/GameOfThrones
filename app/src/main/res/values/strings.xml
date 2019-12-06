@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Game Of Thrones</string>
+
+    <string name="tab_stark">Stark</string>
+    <string name="tab_lannister">Lannister</string>
+    <string name="tab_targaryen">Targaryen</string>
+    <string name="tab_baratheon">Baratheon</string>
+    <string name="tab_greyjoy">Greyjoy</string>
+    <string name="tab_martel">Martel</string>
+    <string name="tab_tyrell">Tyrell</string>
+
+    <string name="character_words_item_name">Words</string>
+    <string name="character_born_item_name">Born</string>
+    <string name="character_titles_item_name">Titles</string>
+    <string name="character_aliases_item_name">Aliases</string>
+    <string name="character_father_item_name">Father</string>
+    <string name="character_mother_item_name">Mother</string>
+    <string name="search_employee_hint">Input name</string>
+    <string name="menu_search_title">Search</string>
+</resources>
