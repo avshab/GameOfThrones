@@ -1,0 +1,86 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="ru.skillbranch.gameofthrones"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+8-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:6:5-67
+11-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:6:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:7:5-79
+12-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:7:22-76
+13
+14    <application
+14-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:9:5-26:19
+15        android:name="ru.skillbranch.gameofthrones.GameOfThronesApp"
+15-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:10:9-41
+16        android:allowBackup="true"
+16-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:11:9-35
+17        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+17-->[androidx.core:core:1.1.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/c8fb16d49138c23210aad3e2ec19fb3a/core-1.1.0/AndroidManifest.xml:24:18-86
+18        android:debuggable="true"
+19        android:icon="@mipmap/ic_launcher"
+19-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:12:9-43
+20        android:label="@string/app_name"
+20-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:13:9-41
+21        android:roundIcon="@mipmap/ic_launcher_round"
+21-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:14:9-54
+22        android:supportsRtl="true"
+22-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:15:9-35
+23        android:testOnly="true"
+24        android:theme="@style/AppTheme" >
+24-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:16:9-40
+25        <activity android:name="ru.skillbranch.gameofthrones.ui.splash_screen.SplashScreen" >
+25-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:18:9-24:20
+25-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:18:19-64
+26            <intent-filter>
+26-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:19:13-23:29
+27                <action android:name="android.intent.action.MAIN" />
+27-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:20:17-69
+27-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:20:25-66
+28
+29                <category android:name="android.intent.category.LAUNCHER" />
+29-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:22:17-77
+29-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:22:27-74
+30            </intent-filter>
+31        </activity>
+32        <activity android:name="ru.skillbranch.gameofthrones.ui.MainActivity" />
+32-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:25:9-53
+32-->/Users/ashab/MiddleAndroid/GameOfThrones/GameOfThrones/app/src/main/AndroidManifest.xml:25:19-50
+33
+34        <provider
+34-->[io.coil-kt:coil:0.8.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/84af8d141134f7eb9382ea7b9aa661a4/coil-0.8.0/AndroidManifest.xml:10:9-13:40
+35            android:name="coil.util.CoilContentProvider"
+35-->[io.coil-kt:coil:0.8.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/84af8d141134f7eb9382ea7b9aa661a4/coil-0.8.0/AndroidManifest.xml:11:13-57
+36            android:authorities="ru.skillbranch.gameofthrones.coil"
+36-->[io.coil-kt:coil:0.8.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/84af8d141134f7eb9382ea7b9aa661a4/coil-0.8.0/AndroidManifest.xml:12:13-56
+37            android:exported="false" />
+37-->[io.coil-kt:coil:0.8.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/84af8d141134f7eb9382ea7b9aa661a4/coil-0.8.0/AndroidManifest.xml:13:13-37
+38
+39        <service
+39-->[androidx.room:room-runtime:2.2.2] /Users/ashab/.gradle/caches/transforms-2/files-2.1/c6641b5d89dab8536a81043297a368ae/room-runtime-2.2.2/AndroidManifest.xml:25:9-27:40
+40            android:name="androidx.room.MultiInstanceInvalidationService"
+40-->[androidx.room:room-runtime:2.2.2] /Users/ashab/.gradle/caches/transforms-2/files-2.1/c6641b5d89dab8536a81043297a368ae/room-runtime-2.2.2/AndroidManifest.xml:26:13-74
+41            android:exported="false" />
+41-->[androidx.room:room-runtime:2.2.2] /Users/ashab/.gradle/caches/transforms-2/files-2.1/c6641b5d89dab8536a81043297a368ae/room-runtime-2.2.2/AndroidManifest.xml:27:13-37
+42
+43        <provider
+43-->[androidx.lifecycle:lifecycle-process:2.1.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/3b61a919539c403c41336c951450aa4a/lifecycle-process-2.1.0/AndroidManifest.xml:23:9-27:43
+44            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+44-->[androidx.lifecycle:lifecycle-process:2.1.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/3b61a919539c403c41336c951450aa4a/lifecycle-process-2.1.0/AndroidManifest.xml:24:13-79
+45            android:authorities="ru.skillbranch.gameofthrones.lifecycle-process"
+45-->[androidx.lifecycle:lifecycle-process:2.1.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/3b61a919539c403c41336c951450aa4a/lifecycle-process-2.1.0/AndroidManifest.xml:25:13-69
+46            android:exported="false"
+46-->[androidx.lifecycle:lifecycle-process:2.1.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/3b61a919539c403c41336c951450aa4a/lifecycle-process-2.1.0/AndroidManifest.xml:26:13-37
+47            android:multiprocess="true" />
+47-->[androidx.lifecycle:lifecycle-process:2.1.0] /Users/ashab/.gradle/caches/transforms-2/files-2.1/3b61a919539c403c41336c951450aa4a/lifecycle-process-2.1.0/AndroidManifest.xml:27:13-40
+48    </application>
+49
+50</manifest>

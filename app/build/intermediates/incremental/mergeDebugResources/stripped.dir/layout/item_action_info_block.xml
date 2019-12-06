@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                       
+                                                   
+
+    
+                                          
+
+                 
+                                  
+                            
+
+                 
+                              
+                            
+           
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:tag="layout/item_action_info_block_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+        <TextView
+            android:id="@+id/title_item_static_block"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="@dimen/base_margin"
+            android:layout_marginBottom="16dp"
+            android:tag="binding_1"          
+            android:textColor="@color/color_primary_dark"
+            android:textSize="@dimen/text_size_14"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Заголовок"
+                                                                                   />
+
+        <Button
+            android:id="@+id/infp_item_static_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="@dimen/small_padding"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingEnd="@dimen/small_padding"
+            android:tag="binding_2"      
+            android:textColor="@color/color_gray"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toEndOf="@+id/title_item_static_block"
+            app:layout_constraintTop_toTopOf="parent"
+                                                                                   />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+         

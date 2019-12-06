@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                       
+                                                   
+
+    
+
+                                           
+
+                 
+                                     
+                                                                                               
+           
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layoutDescription="@xml/collapsing_toolbar" android:tag="layout/character_screen_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+        <ImageView
+            android:id="@+id/character_house_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/greyjoy_coast_of_arms" />
+
+        <TextView
+            android:id="@+id/character_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:tag="binding_1"                                
+            android:textColor="@color/color_gray"
+            android:textAlignment="textStart"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/character_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/character_house_icon" android:tag="binding_2">
+
+            <include
+                android:id="@+id/character_words"
+                layout="@layout/item_static_info_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                                                        
+                                                                     />
+
+            <include
+                android:id="@+id/character_born"
+                layout="@layout/item_static_info_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                                                       
+                                                                    />
+
+            <include
+                android:id="@+id/character_titles"
+                layout="@layout/item_static_info_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                                           
+                                                                      />
+
+            <include
+                android:id="@+id/character_aliases"
+                layout="@layout/item_static_info_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                                            
+                                                                       />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/father_title_text_view"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="56dp"
+                    android:layout_marginTop="@dimen/base_margin"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/character_father_item_name"
+                    android:textColor="@color/color_primary_dark"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"
+                    android:tag="binding_3"                                                                          
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Заголовок" />
+
+                <Button
+                    android:id="@+id/father_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="@dimen/small_padding"
+                    android:paddingTop="@dimen/small_padding"
+                    android:paddingEnd="@dimen/small_padding"
+                    android:tag="binding_4"                                       
+                    android:textColor="@color/color_gray_light"
+                    android:textSize="@dimen/text_size_14"
+                                                                                                                             
+                                                                                                                     
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintStart_toEndOf="@+id/father_title_text_view"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/mother_title_text_view"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="56dp"
+                    android:layout_marginTop="@dimen/base_margin"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/character_father_item_name"
+                    android:textColor="@color/color_primary_dark"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"
+                    android:tag="binding_5"                                                                           
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Заголовок" />
+
+                <Button
+                    android:id="@+id/mother_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="@dimen/small_padding"
+                    android:paddingTop="@dimen/small_padding"
+                    android:paddingEnd="@dimen/small_padding"
+                    android:tag="binding_6"                                       
+                    android:textColor="@color/color_gray_light"
+                    android:textSize="@dimen/text_size_14"
+                                                                                                                             
+                                                                                                                     
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintStart_toEndOf="@+id/mother_title_text_view"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+
+         
