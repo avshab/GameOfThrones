@@ -30,15 +30,15 @@ object RootRepository {
     fun getAllHouses(result: (houses: List<HouseRes>) -> Unit) {
         val fullList = mutableListOf<HouseRes>()
         localScope.launch {
-            var page = 1
+            var pageNumber = 1
             while (true) {
 
                 try {
-                    val data = apiInterface.needPage(page++)
+                    val data = apiInterface.needPage(pageNumber++)
                     if (data.isNullOrEmpty()) {
                         break
                     }
-                    fullList.addAll(data)
+                    fullList.addAll(apiInterface.needPage(pageNumber++))
                 } catch (error: Exception) {
                     Log.i(TAG, error.toString())
                     break
