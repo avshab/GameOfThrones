@@ -38,7 +38,7 @@ object RootRepository {
                     if (data.isNullOrEmpty()) {
                         break
                     }
-                    fullList.addAll(apiInterface.needPage(pageNumber++))
+                    fullList.addAll(data)
                 } catch (error: Exception) {
                     Log.i(TAG, error.toString())
                     break
