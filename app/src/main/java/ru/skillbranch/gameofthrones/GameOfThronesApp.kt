@@ -28,7 +28,7 @@ class GameOfThronesApp : Application() {
         super.onCreate()
 
         DatabaseModule.context = applicationContext
-
+//sfcdcs
         startKoin {
             androidLogger()
             androidContext(this@GameOfThronesApp)
